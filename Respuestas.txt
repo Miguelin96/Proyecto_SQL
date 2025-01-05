@@ -1,0 +1,168 @@
+#Inicio ejercicio I 
+CREATE DATABASE  mi_base_de_datos
+#fin I
+#Inicio Ejercicio II.1
+CREATE TABLE Clientes (
+	IdCliente INT PRIMARY KEY IDENTITY (1,1) NOT NULL,
+	Nombre VARCHAR(50) NOT NULL,
+	Apellido VARCHAR(50) NOT NULL,
+	Fnacimiento DATE NOT NULL,
+	Domicilio VARCHAR(50) NOT NULL,
+	IdPais CHAR(3) NOT NULL,
+	Telefono VARCHAR(12) NULL,
+	Email VARCHAR(30),
+	Observaciones VARCHAR(1000) NULL,
+	FechaAlta DATETIME NOT NULL);
+#fin ejercicio II.1
+#Inicio Ejercicio II.2
+CREATE TABLE Record (
+	IdRecord INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	FechaRecord DATE NOT NULL,
+	Observaciones VARCHAR(1000) NULL);
+#fin ejercicio II.2
+#Inicio Ejercicio II.3
+CREATE TABLE RecordCliente (
+    	IdRecord INT NOT NULL,
+    	IdCliente INT NOT NULL,
+    	IdCampania INT NOT NULL,
+    CONSTRAINT PK_RecordCliente PRIMARY KEY (IdRecord, IdCliente, IdCampania));
+#fin ejercicio II.3
+#Inicio Ejercicio II.4
+CREATE TABLE Pais (
+	IdPais CHAR(3) PRIMARY KEY NOT NULL,
+	NombrePais VARCHAR(100) NOT NULL);
+#fin ejercicio II.4
+#Inicio Ejercicio II.5
+CREATE TABLE HoraCaptacion (
+	IdHCaptacion INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	FechaCaptacion DATE NOT NULL,
+	EstadoCaptacion SMALLINT NOT NULL,
+	Observaciones VARCHAR(1000) NOT NULL);
+#fin ejercicio II.5
+#Inicio Ejercicio II.6
+CREATE TABLE HoraCapClienteCampania (
+    	IdHCaptacion INT NOT NULL,
+    	IdCliente INT NOT NULL,
+    	IdCampania INT NOT NULL,
+    	CONSTRAINT PK_HoraCapClienteCampania PRIMARY KEY (IdHCaptacion, IdCliente,     IdCampania));
+#fin ejercicio II.6
+#Inicio Ejercicio II.7
+CREATE TABLE HorarioEstado (
+	IdEstado SMALLINT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	Descripcion VARCHAR(50) NOT NULL);
+#fin ejercicio II.7
+#Inicio Ejercicio II.8
+CREATE TABLE Producto (
+	IdProducto INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	Producto VARCHAR(100) NOT NULL);
+#fin ejercicio II.8
+#Inicio Ejercicio II.9
+CREATE TABLE Compras (
+	IdCompras INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	Concepto INT NOT NULL,
+	Fecha DATETIME NOT NULL,
+	Monto MONEY NOT NULL,
+	Observaciones VARCHAR(1000) NULL);
+#fin ejercicio II.9
+#Inicio Ejercicio II.10
+CREATE TABLE ComprasCliente (
+	IdCompras INT NOT NULL,
+	IdCliente INT NOT NULL,
+	IdHCaptacion INT NOT NULL,
+	CONSTRAINT PK_ComprasCliente PRIMARY KEY (IdCompras,IdCliente,IdHCaptacion));
+#fin ejercicio II.10
+#Inicio Ejercicio II.11
+CREATE TABLE Campaña (
+	IdCampania INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	NombreCampaña VARCHAR(50) NOT NULL);
+#fin ejercicio II.11
+#Inicio Ejercicio II.12
+CREATE TABLE CampaniaProducto (
+	IdCampania INT IDENTITY(1,1) NOT NULL,
+	IdProducto INT NOT NULL,
+	Descripcion VARCHAR(1000) NOT NULL,
+	CONSTRAINT PK_CampaniaProducto PRIMARY KEY (IdCampania,IdProducto));
+#fin ejercicio II.12
+#Inicio Ejercicio II.13
+CREATE TABLE ConceptoCompra (
+	IdConcepto INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	Concepto VARCHAR(100) NOT NULL);
+#fin ejercicio II.13
+#Inicio Ejercicio IV.B.1 
+INSERT INTO HoraCaptacion (FechaCaptacion, EstadoCaptacion,Observaciones)
+	VALUES ('2024-01-01 10:00',1,'DESCONOCIDO');
+#fin ejercicio IV.B.1
+#Inicio Ejercicio IV.B.2 
+INSERT INTO HoraCapClienteCampania (IdHCaptacion,IdCliente,IdCampania)
+	VALUES (7,13,2)
+#fin ejercicio IV.B.2
+#Inicio Ejercicio V.1
+SELECT * FROM Clientes
+#fin ejercicio V.1
+#Inicio Ejercicio V.2
+SELECT Nombre FROM Clientes
+#fin ejercicio V.2
+#Inicio Ejercicio V.3
+SELECT TOP 3 *
+FROM Clientes
+ORDER BY FNacimiento ASC;
+#fin ejercicio V.3
+#Inicio Ejercicio V.4
+SELECT DISTINCT IdPais
+FROM Clientes;
+#fin ejercicio V.4
+#Inicio Ejercicio V.5
+UPDATE Clientes
+SET email = '200@gmail.es'
+WHERE IdCliente = (SELECT MIN (IdCliente) FROM clientes);
+#fin ejercicio V.5
+#Inicio Ejercicio V.6
+SELECT AVG(Monto) AS promedio_monto
+FROM Compra;
+#fin ejercicio V.6
+#Inicio Ejercicio V.7
+SELECT * FROM HoraCaptacion
+WHERE FechaCaptacion BETWEEN '2024-01-01' AND '2024-01-30';
+#fin ejercicio V.7
+#Inicio Ejercicio V.8
+IF EXISTS (SELECT 1 FROM Clientes WHERE IdPais = 'ESP')
+BEGIN
+    SELECT * FROM Clientes WHERE IdPais = 'ESP';
+END
+ELSE
+BEGIN
+    PRINT 'No se encontraron registros con nacionalidad española';
+END
+#fin ejercicio V.8
+#Inicio Ejercicio V.9
+SELECT 
+    IdPais,
+    CASE
+        WHEN IdPais IN ('ESP', 'GRC', 'DEU') THEN 'Europa'
+        WHEN IdPais IN ('USA', 'MEX') THEN 'América del Norte'
+        WHEN IdPais IN ('BRA') THEN 'América del Sur'
+        WHEN IdPais IN ('IND') THEN 'Asia'
+        ELSE 'Desconocido'
+    END AS Continente
+FROM Pais;
+#fin ejercicio V.9
+#Inicio Ejercicio V.10
+CREATE PROC Nuevo_cliente
+    @Dni varchar(9),
+    @Nombre varchar(50),
+    @Apellido varchar(50),
+    @Fnacimiento date,
+    @Domicilio varchar(50),
+    @Idpais char(3),
+    @Telefono varchar(12),
+    @Email varchar(30),
+    @Observaciones varchar(1000)
+
+AS
+
+BEGIN
+    INSERT INTO Clientes (Dni, Nombre, Apellido, Fnacimiento, Domicilio, Idpais, Telefono, Email, Observaciones, FechaAlta)
+    VALUES (@Dni, @Nombre, @Apellido, @Fnacimiento, @Domicilio, @Idpais, @Telefono, @Email, @Observaciones, GETDATE());
+END
+#fin ejercicio V.10
+
