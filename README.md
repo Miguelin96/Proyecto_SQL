@@ -12,7 +12,7 @@ Este proyecto es parte de la certificación de IBM Skillsbuild y Datahack. El ob
 - SQL Server
 
 ## Instalación
-Ninfuna
+Ninguna
    ```
 
 ## Uso
