@@ -1,7 +1,7 @@
-# Proyecto_SQL_Datahack
+# Proyecto SQL Datahack - IBM Skillsbuild
 
 ## Descripción
-Este proyecto es parte de la certificación de IBM Skillbuild y Datahack. El objetivo es diseñar y gestionar una base de datos eficiente y funcional para un caso de estudio específico.
+Este proyecto es parte de la certificación de IBM Skillsbuild y Datahack. El objetivo es diseñar y gestionar una base de datos eficiente y funcional para un caso de estudio específico.
 
 ## Estructura del Proyecto
 - **Capstone_proyect_SQL_SR.pdf**: Documento principal del proyecto.
